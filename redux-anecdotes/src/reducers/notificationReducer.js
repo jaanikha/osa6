@@ -1,17 +1,27 @@
 const initialNotification = ''
+var addAnecTimeout
+var voteTimeout
 
-
-export const voteNotification = (anecdote) => {
-  return {
+export const voteNotification = (message, timeout) => {
+  return dispatch => {
+    clearTimeout(voteTimeout)
+    voteTimeout = setTimeout(function(){ dispatch(empty()) }, timeout*1000)
+    dispatch({
     type: 'VOTE_NOTIFICATION',
-    data: anecdote
+    data: message
+    })
   }
 }
 
-export const addAnecdoteNotification = (anecdote) => {
-  return {
+export const addAnecdoteNotification = (message, timeout) => {
+  
+  return dispatch => {
+    clearTimeout(addAnecTimeout)
+    addAnecTimeout = setTimeout(function(){ dispatch(empty()) }, timeout*1000)
+    dispatch({
     type: 'ADD_ANECDOTE_NOTIFICATION',
-    data: anecdote
+    data: message
+    })
   }
 }
 
@@ -23,8 +33,8 @@ export const empty = () => {
 
 const notificationReducer = (state = initialNotification, action) => {
     switch (action.type) {
-        case 'VOTE_NOTIFICATION': return(`succesfully voted for '${action.data}'`)
-        case 'ADD_ANECDOTE_NOTIFICATION': return(`succesfully added '${action.data}'`)
+        case 'VOTE_NOTIFICATION': return(action.data)
+        case 'ADD_ANECDOTE_NOTIFICATION': return(action.data)
         case 'EMPTY': return('')
         default: return(state)
     }
